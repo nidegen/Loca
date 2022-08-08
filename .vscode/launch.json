@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug Loca",
+      "program": ".build/debug/Loca",
+      "args": [],
+      "cwd": "${workspaceFolder:Loca}",
+      "preLaunchTask": "swift: Build Debug Loca"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Release Loca",
+      "program": ".build/release/Loca",
+      "args": [],
+      "cwd": "${workspaceFolder:Loca}",
+      "preLaunchTask": "swift: Build Release Loca"
+    }
+  ]
+}
