@@ -1,6 +1,6 @@
 import Foundation
 
-class Glossary {
+class Glossary: Codable {
   var keys = Set<LocalizedKey>()
   
   func load(data: [String: [String: Any]], ofTags tags: Set<String>, languages: [LanguageCode] = [.en, .deCH, .frCH]) {
@@ -33,5 +33,17 @@ class Glossary {
       }
       keys.insert(key)
     }
+  }
+  
+  func getData(language: LanguageCode, tag: String) -> [String: String] {
+    var dict = [String: String]()
+    
+    keys.forEach { key in
+      guard key.tags?.contains(tag) ?? false else { return }
+      if let translation = key.translations?[language] {
+        dict[key.id] = translation
+      }
+    }
+    return dict
   }
 }

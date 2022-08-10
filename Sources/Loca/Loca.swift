@@ -6,6 +6,9 @@ struct Loca: AsyncParsableCommand {
   @Option(name: .shortAndLong, help: "Example toggle")
   var example: Bool = false
   
+  let testRepoKey = "REYlbwj4cdwO8mNCPn02peaucDkvK0X4c"
+  let brezelkoenigKey = "4VzaYMZZsAuO0meW2iicPqvO8rcWOXU6"
+  
   mutating func run() async throws {
     let interface = Interface()
     
