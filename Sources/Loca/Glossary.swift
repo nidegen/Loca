@@ -3,7 +3,7 @@ import Foundation
 class Glossary: Codable {
   var keys = Set<LocalizedKey>()
   
-  func load(data: [String: [String: Any]], ofTags tags: Set<String>, languages: [LanguageCode] = [.en, .deCH, .frCH]) {
+  func load(data: [String: [String: Any]], ofTags tags: Set<String>, languages: [Locale] = [.en, .deCH, .frCH]) {
     for language in languages {
       if let dict = data[language.rawValue] {
         load(data: dict, ofTags: tags, forLanguage: language)
@@ -11,7 +11,7 @@ class Glossary: Codable {
     }
   }
   
-  func load(data: [String: Any], ofTags tags: Set<String>, forLanguage language: LanguageCode) {
+  func load(data: [String: Any], ofTags tags: Set<String>, forLanguage language: Locale) {
     data.forEach { (keyId: String, translations: Any) in
       let existingkey = keys.first { $0.id == keyId }
       var key = LocalizedKey(id: keyId)
@@ -35,7 +35,7 @@ class Glossary: Codable {
     }
   }
   
-  func getData(language: LanguageCode, tag: String) -> [String: String] {
+  func getData(language: Locale, tag: String) -> [String: String] {
     var dict = [String: String]()
     
     keys.forEach { key in

@@ -6,8 +6,8 @@ struct Loca: AsyncParsableCommand {
   @Option(name: .shortAndLong, help: "Example toggle")
   var example: Bool = false
   
-  let testRepoKey = "REYlbwj4cdwO8mNCPn02peaucDkvK0X4c"
-  let brezelkoenigKey = "4VzaYMZZsAuO0meW2iicPqvO8rcWOXU6"
+  var testRepoKey = "REYlbwj4cdwO8mNCPn02peaucDkvK0X4c"
+  var brezelkoenigKey = "4VzaYMZZsAuO0meW2iicPqvO8rcWOXU6"
   
   mutating func run() async throws {
     let interface = Interface()
@@ -19,6 +19,10 @@ struct Loca: AsyncParsableCommand {
     let dictAndroid = try await interface.loadTranslations(filter: "android")
     glossary.load(data: dictAndroid, ofTags: ["android"])
     
+    guard let data = glossary.getData(language: .frCH, tag: "ios").jsonData else { return }
+    
+    let response = try await interface.upload(data: data, key: testRepoKey, tag: "android", locale: .frCH)
+    print(response)
     print("-=-=-")
   }
 }

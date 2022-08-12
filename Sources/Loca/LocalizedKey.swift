@@ -1,6 +1,6 @@
 import Foundation
 
-enum LanguageCode: String, Codable {
+enum Locale: String, Codable {
   case en = "en"
   case deCH = "de-CH"
   case frCH = "fr-CH"
@@ -28,12 +28,12 @@ class LocalizedKey: Codable, Identifiable, Hashable {
   }
   
   var id: String
-  var translations: [LanguageCode: String]?
-  var plurals: [LanguageCode: [Plural]]?
+  var translations: [Locale: String]?
+  var plurals: [Locale: [Plural]]?
   var tags: Set<String>?
   var comment: String?
   
-  func add(translation: String, ofLanguage language: LanguageCode, withTags newTags: Set<String>) {
+  func add(translation: String, ofLanguage language: Locale, withTags newTags: Set<String>) {
     
     if (id == "more__help_legal__support") {
         print(2)
@@ -58,7 +58,7 @@ class LocalizedKey: Codable, Identifiable, Hashable {
     tags = newTags.union(tags ?? [])
   }
   
-  func add(plural: Plural, ofLanguage language: LanguageCode, withTags newTags: Set<String>) {
+  func add(plural: Plural, ofLanguage language: Locale, withTags newTags: Set<String>) {
     if let existingPlurals = plurals {
       // Already some languages exist
       if var existingLanguagePlurals = existingPlurals[language]  {

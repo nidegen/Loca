@@ -14,15 +14,17 @@ class Interface {
   }
   
   
-  func upload(data: Data, key: String = "REYlbwj4cdwO8mNCPn02peaucDkvK0X4c", tag: String = "ios") async throws -> [String: Any] {
+  func upload(data: Data, key: String, tag: String, locale: Locale) async throws -> [String: Any] {
     let (data, _) = try await URLSession
-      .shared.data(for: makeRequest(data: data, key: key, tagAll: [tag]))
+      .shared.data(for: makeRequest(data: data, key: key, locale: locale, tagAll: [tag]))
+    data.printJSON()
     return data.convertToDictionary() ?? [:]
   }
   
   public func makeRequest(
     data: Data,
     key: String = "REYlbwj4cdwO8mNCPn02peaucDkvK0X4c",
+    locale: Locale,
     tagAll: [String]
   ) -> URLRequest {
     
@@ -31,9 +33,12 @@ class Interface {
 
     // Append updated query items array in the url component object
     urlComponents.queryItems = [
+      URLQueryItem(name: "locale", value: locale.rawValue),
       URLQueryItem(name: "key", value: key),
-      URLQueryItem(name: "tags-all", value: tagAll.joined(separator: ",")),
-      URLQueryItem(name: "flag-new", value: "unapproved")
+      URLQueryItem(name: "tag-all", value: tagAll.joined(separator: ",")),
+      URLQueryItem(name: "flag-new", value: "unapproved"),
+      URLQueryItem(name: "flag-updated", value: "unapproved")
+      
     ]
     
     var request = URLRequest(url: urlComponents.url!)
