@@ -38,10 +38,48 @@ class Interface {
     
     var request = URLRequest(url: urlComponents.url!)
     request.httpMethod = "POST"
+    request.setValue(key, forHTTPHeaderField: "Authentication")
     request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
     
     request.httpBody = data
     
     return request
+  }
+  
+  func write(to url: URL, glossary: Glossary) {
+    do {
+      let data = try JSONEncoder().encode(glossary)
+      // The JSON data is in bytes. Let's printit as a JSON string.
+      if let jsonString = String(data: data, encoding: .utf8) {
+        print(jsonString)
+      }
+      let dict = data.convertToArray()!
+      let jsonData = dict.jsonData!
+      try data.write(to: url)
+    } catch {
+      print("🚨 Error: Could not write to \(url)")
+    }
+  }
+  
+  private func getAssets(key: String) async throws -> Data {
+    let (data, _) = try await URLSession.shared.data(from: URL(string: "https://localise.biz/api/assets?key=\(key)")!)
+    return data
+  }
+  
+  func getAssets(key: String) async throws -> [Asset] {
+    try JSONDecoder().decode([Asset].self, from: try await getAssets(key: key))
+  }
+  
+  private func getTranslation(id: String, key: String) async throws -> Data {
+    try await URLSession.shared.data(from: URL(string: "https://localise.biz/api/translations/\(id)?key=\(key)")!).0
+  }
+  
+  func getTranslations(ids: [String], key: String) async throws -> [Translation] {
+    var translations = [Translation]()
+    for id in ids {
+      let translation = try JSONDecoder().decode([Translation].self, from: try await getTranslation(id: id, key: key))
+      translation.first.map { translations.append($0) }
+    }
+    return translations
   }
 }

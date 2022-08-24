@@ -1,6 +1,6 @@
 import Foundation
 
-enum LanguageCode: String, Codable {
+enum LanguageCode: String, Codable, CodingKeyRepresentable  {
   case en = "en"
   case deCH = "de-CH"
   case frCH = "fr-CH"

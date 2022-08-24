@@ -31,7 +31,6 @@ class Glossary: Codable {
           }
         }
       }
-      keys.insert(key)
     }
   }
   

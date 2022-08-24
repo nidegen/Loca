@@ -11,14 +11,19 @@ struct Loca: AsyncParsableCommand {
   
   mutating func run() async throws {
     let interface = Interface()
-    
+
     let glossary = Glossary()
-    
-    let dict = try await interface.loadTranslations(filter: "ios")
-    glossary.load(data: dict, ofTags: ["ios"])
-    let dictAndroid = try await interface.loadTranslations(filter: "android")
-    glossary.load(data: dictAndroid, ofTags: ["android"])
-    
+//
+//    let dict = try await interface.loadTranslations(filter: "ios")
+//    glossary.load(data: dict, ofTags: ["ios"])
+//    let dictAndroid = try await interface.loadTranslations(filter: "android")
+//    glossary.load(data: dictAndroid, ofTags: ["android"])
+//
+//    interface.write(to: FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop/temp.json"), glossary: glossary)
+    let assets = try! await interface.getAssets(key: testRepoKey)
+    let translations = try! await interface.getTranslations(ids: assets.map { $0.id }, key: testRepoKey)
+   print(assets.first?.id ?? "")
+
     print("-=-=-")
   }
 }
@@ -36,8 +41,13 @@ extension Dictionary {
     try? JSONSerialization.data(withJSONObject: self, options: [.prettyPrinted, .sortedKeys])
   }
 }
+
 extension Data {
   func convertToDictionary() -> [String: [String: Any]]? {
     return try? JSONSerialization.jsonObject(with: self, options: []) as? [String: [String: Any]]
+  }
+  
+  func convertToArray() -> [String: [Any]]? {
+    return try? JSONSerialization.jsonObject(with: self, options: []) as? [String: [Any]]
   }
 }
